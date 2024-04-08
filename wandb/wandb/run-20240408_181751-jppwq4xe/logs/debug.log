@@ -1,0 +1,28 @@
+2024-04-08 18:17:51,296 INFO    MainThread:211480 [wandb_setup.py:_flush():76] Configure stats pid to 211480
+2024-04-08 18:17:51,296 INFO    MainThread:211480 [wandb_setup.py:_flush():76] Loading settings from /root/.config/wandb/settings
+2024-04-08 18:17:51,296 INFO    MainThread:211480 [wandb_setup.py:_flush():76] Loading settings from /home/workdir/wandb/settings
+2024-04-08 18:17:51,296 INFO    MainThread:211480 [wandb_setup.py:_flush():76] Loading settings from environment variables: {}
+2024-04-08 18:17:51,296 INFO    MainThread:211480 [wandb_setup.py:_flush():76] Applying setup settings: {'_disable_service': False}
+2024-04-08 18:17:51,296 INFO    MainThread:211480 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': 'train.py', 'program': 'train.py'}
+2024-04-08 18:17:51,296 INFO    MainThread:211480 [wandb_setup.py:_flush():76] Applying login settings: {'api_key': '***REDACTED***'}
+2024-04-08 18:17:51,296 INFO    MainThread:211480 [wandb_init.py:_log_setup():506] Logging user logs to wandb/wandb/run-20240408_181751-jppwq4xe/logs/debug.log
+2024-04-08 18:17:51,296 INFO    MainThread:211480 [wandb_init.py:_log_setup():507] Logging internal logs to wandb/wandb/run-20240408_181751-jppwq4xe/logs/debug-internal.log
+2024-04-08 18:17:51,296 INFO    MainThread:211480 [wandb_init.py:init():546] calling init triggers
+2024-04-08 18:17:51,296 INFO    MainThread:211480 [wandb_init.py:init():552] wandb.init called with sweep_config: {}
+config: {}
+2024-04-08 18:17:51,297 INFO    MainThread:211480 [wandb_init.py:init():602] starting backend
+2024-04-08 18:17:51,297 INFO    MainThread:211480 [wandb_init.py:init():606] setting up manager
+2024-04-08 18:17:51,300 INFO    MainThread:211480 [backend.py:_multiprocessing_setup():106] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2024-04-08 18:17:51,302 INFO    MainThread:211480 [wandb_init.py:init():613] backend started and connected
+2024-04-08 18:17:51,304 INFO    MainThread:211480 [wandb_init.py:init():701] updated telemetry
+2024-04-08 18:17:51,314 INFO    MainThread:211480 [wandb_init.py:init():741] communicating run to backend with 60.0 second timeout
+2024-04-08 18:17:54,333 WARNING MsgRouterThr:211480 [router.py:message_loop():77] message_loop has been closed
+2024-04-08 18:18:01,325 ERROR   MainThread:211480 [wandb_init.py:init():1171] error
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.8/dist-packages/wandb/sdk/wandb_init.py", line 1144, in init
+    run = wi.init()
+  File "/usr/local/lib/python3.8/dist-packages/wandb/sdk/wandb_init.py", line 744, in init
+    result = run_init_handle.wait(
+  File "/usr/local/lib/python3.8/dist-packages/wandb/sdk/lib/mailbox.py", line 281, in wait
+    raise MailboxError("transport failed")
+wandb.sdk.lib.mailbox.MailboxError: transport failed

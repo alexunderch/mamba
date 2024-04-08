@@ -2,55 +2,63 @@ from copy import deepcopy
 
 import ray
 import torch
-from flatland.envs.agent_utils import RailAgentStatus
 from collections import defaultdict
 
 from environments import Env
-
+import numpy as np
 
 @ray.remote
 class DreamerWorker:
 
     def __init__(self, idx, env_config, controller_config):
         self.runner_handle = idx
-        self.env = env_config.create_env()
+        self.env = env_config[0].create_env()
         self.controller = controller_config.create_controller()
         self.in_dim = controller_config.IN_DIM
-        self.env_type = env_config.ENV_TYPE
+        self.env_type = env_config[0].ENV_TYPE
+        self.n_agents = self.env.n_agents if self.env_type == Env.STARCRAFT else self.env.get_num_agents()
 
     def _check_handle(self, handle):
         if self.env_type == Env.STARCRAFT:
-            return self.done[handle] == 0
-        else:
-            return self.env.agents[handle].status in (RailAgentStatus.ACTIVE, RailAgentStatus.READY_TO_DEPART) \
-                   and not self.env.obs_builder.deadlock_checker.is_deadlocked(handle)
+            return self.done[handle] == 0 
+        elif self.env_type == Env.POGEMA:
+            return self.done[handle] == 0 and self.info[handle]["is_active"]
 
     def _select_actions(self, state):
         avail_actions = []
         observations = []
         fakes = []
-        if self.env_type == Env.FLATLAND:
-            nn_mask = (1. - torch.eye(self.env.n_agents)).bool()
-        else:
-            nn_mask = None
+        nn_mask = None
 
-        for handle in range(self.env.n_agents):
-            if self.env_type == Env.FLATLAND:
-                for opp_handle in self.env.obs_builder.encountered[handle]:
-                    if opp_handle != -1:
-                        nn_mask[handle, opp_handle] = False
-            else:
+        for handle in range(self.n_agents):
+            if self.env_type == Env.STARCRAFT:
                 avail_actions.append(torch.tensor(self.env.get_avail_agent_actions(handle)))
 
-            if self._check_handle(handle) and handle in state:
+            def constains(handle, state):
+                if isinstance(state, dict):
+                    return handle in state
+                return handle in range(len(state))
+
+            if self._check_handle(handle) and constains(handle, state):
                 fakes.append(torch.zeros(1, 1))
-                observations.append(state[handle].unsqueeze(0))
-            elif self.done[handle] == 1:
+                if self.env_type == Env.POGEMA:
+                    observations.append(state[handle].reshape(-1).unsqueeze(0))
+                else:
+                    observations.append(state[handle].unsqueeze(0))
+            elif not self._check_handle(handle):
                 fakes.append(torch.ones(1, 1))
-                observations.append(self.get_absorbing_state())
+                if self.env_type == Env.STARCRAFT:
+                    obs = self.get_absorbing_state()
+                elif self.env_type == Env.POGEMA:
+                    obs = self.get_absorbing_state().reshape(-1).unsqueeze(0)
+                
+                observations.append(obs)
             else:
                 fakes.append(torch.zeros(1, 1))
-                obs = torch.tensor(self.env.obs_builder._get_internal(handle)).float().unsqueeze(0)
+                if self.env_type == Env.STARCRAFT:
+                    obs = torch.tensor(self.env.obs_builder._get_internal(handle)).float().unsqueeze(0)
+                else:
+                    obs = self.get_absorbing_state().reshape(1, -1)
                 observations.append(obs)
 
         observations = torch.cat(observations).unsqueeze(0)
@@ -60,8 +68,12 @@ class DreamerWorker:
         return actions, observations, torch.cat(fakes).unsqueeze(0), av_action
 
     def _wrap(self, d):
-        for key, value in d.items():
-            d[key] = torch.tensor(value).float()
+        if isinstance(d, list):
+            for key, value in enumerate(d):
+                d[key] = torch.tensor(value).float()
+        elif isinstance(d, dict):
+            for key, value in d.items():
+                d[key] = torch.tensor(value).float()
         return d
 
     def get_absorbing_state(self):
@@ -70,9 +82,15 @@ class DreamerWorker:
 
     def augment(self, data, inverse=False):
         aug = []
-        default = list(data.values())[0].reshape(1, -1)
-        for handle in range(self.env.n_agents):
-            if handle in data.keys():
+        if self.env_type == Env.STARCRAFT:
+            default = list(data.values())[0].reshape(1, -1)
+            it = data.keys()
+        elif self.env_type == Env.POGEMA:
+            default = data[0].reshape(1, -1)
+            it = range(len(data))
+
+        for handle in range(self.n_agents):
+            if handle in it:
                 aug.append(data[handle].reshape(1, -1))
             else:
                 aug.append(torch.ones_like(default) if inverse else torch.zeros_like(default))
@@ -81,22 +99,34 @@ class DreamerWorker:
     def _check_termination(self, info, steps_done):
         if self.env_type == Env.STARCRAFT:
             return "episode_limit" not in info
+        elif self.env_type == Env.POGEMA:
+            steps_done < self.env.grid_config.max_episode_steps
         else:
             return steps_done < self.env.max_time_steps
 
     def run(self, dreamer_params):
         self.controller.receive_params(dreamer_params)
 
-        state = self._wrap(self.env.reset())
+        if self.env_type == Env.POGEMA:
+            state, self.info = self.env.reset()
+            state = self._wrap(state)
+        else:
+            state = self._wrap(self.env.reset())
+
         steps_done = 0
         self.done = defaultdict(lambda: False)
 
         while True:
             steps_done += 1
             actions, obs, fakes, av_actions = self._select_actions(state)
-            next_state, reward, done, info = self.env.step([action.argmax() for i, action in enumerate(actions)])
+            if self.env_type == Env.STARCRAFT:
+                next_state, reward, done, info = self.env.step([action.argmax() for i, action in enumerate(actions)])
+            elif self.env_type == Env.POGEMA:
+                next_state, reward, terminated, truncated, info = self.env.step([action.argmax() for i, action in enumerate(actions)])
+                done = torch.maximum(torch.Tensor(terminated), torch.Tensor(truncated))
             next_state, reward, done = self._wrap(deepcopy(next_state)), self._wrap(deepcopy(reward)), self._wrap(deepcopy(done))
             self.done = done
+            self.info = info
             self.controller.update_buffer({"action": actions,
                                            "observation": obs,
                                            "reward": self.augment(reward),
@@ -105,27 +135,30 @@ class DreamerWorker:
                                            "avail_action": av_actions})
 
             state = next_state
-            if all([done[key] == 1 for key in range(self.env.n_agents)]):
+            if all([done[key] == 1 for key in range(self.n_agents)]):
                 if self._check_termination(info, steps_done):
-                    obs = torch.cat([self.get_absorbing_state() for i in range(self.env.n_agents)]).unsqueeze(0)
-                    actions = torch.zeros(1, self.env.n_agents, actions.shape[-1])
+                    obs = torch.cat([self.get_absorbing_state() for i in range(self.n_agents)]).unsqueeze(0)
+                    actions = torch.zeros(1, self.n_agents, actions.shape[-1])
                     index = torch.randint(0, actions.shape[-1], actions.shape[:-1], device=actions.device)
                     actions.scatter_(2, index.unsqueeze(-1), 1.)
                     items = {"observation": obs,
                              "action": actions,
-                             "reward": torch.zeros(1, self.env.n_agents, 1),
-                             "fake": torch.ones(1, self.env.n_agents, 1),
-                             "done": torch.ones(1, self.env.n_agents, 1),
+                             "reward": torch.zeros(1, self.n_agents, 1),
+                             "fake": torch.ones(1, self.n_agents, 1),
+                             "done": torch.ones(1, self.n_agents, 1),
                              "avail_action": torch.ones_like(actions) if self.env_type == Env.STARCRAFT else None}
                     self.controller.update_buffer(items)
                     self.controller.update_buffer(items)
                 break
-
-        if self.env_type == Env.FLATLAND:
-            reward = sum(
-                [1 for agent in self.env.agents if agent.status == RailAgentStatus.DONE_REMOVED]) / self.env.n_agents
-        else:
+        
+        if self.env_type == Env.STARCRAFT:
             reward = 1. if 'battle_won' in info and info['battle_won'] else 0.
+            reward = {"reward": reward}
+        elif self.env_type == Env.POGEMA:
+            reward = {
+                f"reward_agent_{key}": reward[key].reshape(-1).item() for key in range(self.n_agents)
+            }
+
         return self.controller.dispatch_buffer(), {"idx": self.runner_handle,
-                                                   "reward": reward,
+                                                    **reward,
                                                    "steps_done": steps_done}

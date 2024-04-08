@@ -120,11 +120,11 @@ class DreamerLearner:
                                                                             samples['action'],
                                                                             samples['last'], self.model,
                                                                             self.actor,
-                                                                            self.critic if self.config.ENV_TYPE == Env.STARCRAFT
+                                                                            self.critic if self.config.ENV_TYPE in [Env.STARCRAFT, Env.POGEMA]
                                                                             else self.old_critic,
                                                                             self.config)
         adv = returns.detach() - self.critic(imag_feat).detach()
-        if self.config.ENV_TYPE == Env.STARCRAFT:
+        if self.config.ENV_TYPE == Env.STARCRAFT or self.config.ENV_TYPE == Env.POGEMA:
             adv = advantage(adv)
         wandb.log({'Agent/Returns': returns.mean()})
         for epoch in range(self.config.PPO_EPOCHS):
@@ -141,7 +141,7 @@ class DreamerLearner:
                 if np.random.randint(20) == 9:
                     wandb.log({'Agent/val_loss': val_loss, 'Agent/actor_loss': loss})
                 self.apply_optimizer(self.critic_optimizer, self.critic, val_loss, self.config.GRAD_CLIP_POLICY)
-                if self.config.ENV_TYPE == Env.FLATLAND and self.cur_update % self.config.TARGET_UPDATE == 0:
+                if self.cur_update % self.config.TARGET_UPDATE == 0: ##????
                     self.old_critic = deepcopy(self.critic)
 
     def apply_optimizer(self, opt, model, loss, grad_clip):

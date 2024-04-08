@@ -1,0 +1,34 @@
+Traceback (most recent call last):
+  File "train.py", line 79, in <module>
+    train_dreamer(exp, n_workers=args.n_workers)
+  File "train.py", line 22, in train_dreamer
+    runner.run(exp.steps, exp.episodes)
+  File "/home/workdir/agent/runners/DreamerRunner.py", line 38, in run
+    rollout, info = self.server.run()
+  File "/home/workdir/agent/runners/DreamerRunner.py", line 20, in run
+    recvs = ray.get(done_id)[0]
+  File "/usr/local/lib/python3.8/dist-packages/ray/_private/client_mode_hook.py", line 105, in wrapper
+    return func(*args, **kwargs)
+  File "/usr/local/lib/python3.8/dist-packages/ray/worker.py", line 1833, in get
+    raise value
+ray.exceptions.RayActorError: The actor died because of an error raised in its creation task, [36mray::DreamerWorker.__init__()[39m (pid=214664, ip=172.17.0.3, repr=<agent.workers.DreamerWorker.DreamerWorker object at 0x7f77fc341c40>)
+  File "/home/workdir/agent/workers/DreamerWorker.py", line 15, in __init__
+    self.env = env_config.create_env()
+AttributeError: 'tuple' object has no attribute 'create_env'
+Traceback (most recent call last):
+  File "train.py", line 79, in <module>
+    train_dreamer(exp, n_workers=args.n_workers)
+  File "train.py", line 22, in train_dreamer
+    runner.run(exp.steps, exp.episodes)
+  File "/home/workdir/agent/runners/DreamerRunner.py", line 38, in run
+    rollout, info = self.server.run()
+  File "/home/workdir/agent/runners/DreamerRunner.py", line 20, in run
+    recvs = ray.get(done_id)[0]
+  File "/usr/local/lib/python3.8/dist-packages/ray/_private/client_mode_hook.py", line 105, in wrapper
+    return func(*args, **kwargs)
+  File "/usr/local/lib/python3.8/dist-packages/ray/worker.py", line 1833, in get
+    raise value
+ray.exceptions.RayActorError: The actor died because of an error raised in its creation task, [36mray::DreamerWorker.__init__()[39m (pid=214664, ip=172.17.0.3, repr=<agent.workers.DreamerWorker.DreamerWorker object at 0x7f77fc341c40>)
+  File "/home/workdir/agent/workers/DreamerWorker.py", line 15, in __init__
+    self.env = env_config.create_env()
+AttributeError: 'tuple' object has no attribute 'create_env'

@@ -69,9 +69,9 @@ def critic_rollout(model, critic, states, rew_states, actions, raw_states, confi
         imag_reward = imag_reward.reshape(actions.shape[:-1]).unsqueeze(-1).mean(-2, keepdim=True)[:-1]
         value = critic(states)
         discount_arr = model.pcont(rew_states).mean
-        wandb.log({'Value/Max reward': imag_reward.max(), 'Value/Min reward': imag_reward.min(),
-                   'Value/Reward': imag_reward.mean(), 'Value/Discount': discount_arr.mean(),
-                   'Value/Value': value.mean()})
+        wandb.log({'Critic/Max reward': imag_reward.max(), 'Critic/Min reward': imag_reward.min(),
+                   'Critic/Reward': imag_reward.mean(), 'Critic/Discount': discount_arr.mean(),
+                   'Critic/Value': value.mean()})
     returns = compute_return(imag_reward, value[:-1], discount_arr, bootstrap=value[-1], lmbda=config.DISCOUNT_LAMBDA,
                              gamma=config.GAMMA)
     return returns

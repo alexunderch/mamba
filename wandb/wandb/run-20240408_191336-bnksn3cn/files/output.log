@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "train.py", line 79, in <module>
+    train_dreamer(exp, n_workers=args.n_workers)
+  File "train.py", line 22, in train_dreamer
+    runner.run(exp.steps, exp.episodes)
+  File "/home/workdir/agent/runners/DreamerRunner.py", line 44, in run
+    print(cur_episode, self.learner.total_samples, info["reward"])
+KeyError: 'reward'
+Traceback (most recent call last):
+  File "train.py", line 79, in <module>
+    train_dreamer(exp, n_workers=args.n_workers)
+  File "train.py", line 22, in train_dreamer
+    runner.run(exp.steps, exp.episodes)
+  File "/home/workdir/agent/runners/DreamerRunner.py", line 44, in run
+    print(cur_episode, self.learner.total_samples, info["reward"])
+KeyError: 'reward'

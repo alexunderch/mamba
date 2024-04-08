@@ -39,9 +39,9 @@ class DreamerRunner:
             self.learner.step(rollout)
             cur_steps += info["steps_done"]
             cur_episode += 1
-            wandb.log({'reward': info["reward"], 'steps': cur_steps})
+            wandb.log({**info, 'steps': cur_steps})
 
-            print(cur_episode, self.learner.total_samples, info["reward"])
+            print(cur_episode, self.learner.total_samples, info)
             if cur_episode >= max_episodes or cur_steps >= max_steps:
                 break
             self.server.append(info['idx'], self.learner.params())

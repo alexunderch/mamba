@@ -1,0 +1,35 @@
+2024-04-08 18:17:51,304 INFO    StreamThr :211511 [internal.py:wandb_internal():87] W&B internal server running at pid: 211511, started at: 2024-04-08 18:17:51.303722
+2024-04-08 18:17:51,306 DEBUG   HandlerThread:211511 [handler.py:handle_request():144] handle_request: status
+2024-04-08 18:17:51,310 INFO    WriterThread:211511 [datastore.py:open_for_write():85] open: wandb/wandb/run-20240408_181751-jppwq4xe/run-jppwq4xe.wandb
+2024-04-08 18:17:51,311 DEBUG   SenderThread:211511 [sender.py:send():336] send: header
+2024-04-08 18:17:51,315 DEBUG   SenderThread:211511 [sender.py:send():336] send: run
+2024-04-08 18:17:52,315 INFO    HandlerThread:211511 [handler.py:finish():842] shutting down handler
+2024-04-08 18:17:52,315 INFO    WriterThread:211511 [datastore.py:close():298] close: wandb/wandb/run-20240408_181751-jppwq4xe/run-jppwq4xe.wandb
+2024-04-08 18:17:52,315 ERROR   StreamThr :211511 [internal.py:wandb_internal():175] Thread SenderThread:
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.8/dist-packages/wandb/sdk/internal/internal_util.py", line 49, in run
+    self._run()
+  File "/usr/local/lib/python3.8/dist-packages/wandb/sdk/internal/internal_util.py", line 100, in _run
+    self._process(record)
+  File "/usr/local/lib/python3.8/dist-packages/wandb/sdk/internal/internal.py", line 329, in _process
+    self._sm.send(record)
+  File "/usr/local/lib/python3.8/dist-packages/wandb/sdk/internal/sender.py", line 343, in send
+    send_handler(record)
+  File "/usr/local/lib/python3.8/dist-packages/wandb/sdk/internal/sender.py", line 896, in send_run
+    run.project = util.auto_project_name(self._settings.program)
+  File "/usr/local/lib/python3.8/dist-packages/wandb/util.py", line 1454, in auto_project_name
+    root_dir = wandb.wandb_sdk.lib.git.GitRepo().root_dir
+  File "/usr/local/lib/python3.8/dist-packages/wandb/sdk/lib/git.py", line 147, in root_dir
+    return self.repo.git.rev_parse("--show-toplevel")
+  File "/usr/local/lib/python3.8/dist-packages/git/cmd.py", line 986, in <lambda>
+    return lambda *args, **kwargs: self._call_process(name, *args, **kwargs)
+  File "/usr/local/lib/python3.8/dist-packages/git/cmd.py", line 1598, in _call_process
+    return self.execute(call, **exec_kwargs)
+  File "/usr/local/lib/python3.8/dist-packages/git/cmd.py", line 1388, in execute
+    raise GitCommandError(redacted_command, status, stderr_value, stdout_value)
+git.exc.GitCommandError: Cmd('git') failed due to: exit code(128)
+  cmdline: git rev-parse --show-toplevel
+  stderr: 'fatal: detected dubious ownership in repository at '/home/workdir'
+To add an exception for this directory, call:
+
+	git config --global --add safe.directory /home/workdir'
