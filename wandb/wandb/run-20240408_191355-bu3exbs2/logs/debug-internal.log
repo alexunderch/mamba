@@ -417,3 +417,55 @@
 2024-04-08 19:22:26,429 DEBUG   SenderThread:329325 [sender.py:send():336] send: stats
 2024-04-08 19:22:26,573 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: keepalive
 2024-04-08 19:22:27,430 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: status_report
+2024-04-08 19:22:31,574 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: keepalive
+2024-04-08 19:22:32,431 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: status_report
+2024-04-08 19:22:34,153 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: partial_history
+2024-04-08 19:22:34,154 DEBUG   SenderThread:329325 [sender.py:send():336] send: history
+2024-04-08 19:22:34,154 DEBUG   SenderThread:329325 [sender.py:send_request():363] send_request: summary_record
+2024-04-08 19:22:34,155 INFO    SenderThread:329325 [sender.py:_save_file():1332] saving file wandb-summary.json with policy end
+2024-04-08 19:22:34,385 INFO    Thread-13 :329325 [dir_watcher.py:_on_file_modified():295] file/dir modified: wandb/wandb/run-20240408_191355-bu3exbs2/files/wandb-summary.json
+2024-04-08 19:22:36,575 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: keepalive
+2024-04-08 19:22:38,156 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: status_report
+2024-04-08 19:22:41,575 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: keepalive
+2024-04-08 19:22:42,279 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: partial_history
+2024-04-08 19:22:42,280 DEBUG   SenderThread:329325 [sender.py:send():336] send: history
+2024-04-08 19:22:42,280 DEBUG   SenderThread:329325 [sender.py:send_request():363] send_request: summary_record
+2024-04-08 19:22:42,280 INFO    SenderThread:329325 [sender.py:_save_file():1332] saving file wandb-summary.json with policy end
+2024-04-08 19:22:42,387 INFO    Thread-13 :329325 [dir_watcher.py:_on_file_modified():295] file/dir modified: wandb/wandb/run-20240408_191355-bu3exbs2/files/wandb-summary.json
+2024-04-08 19:22:43,280 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: status_report
+2024-04-08 19:22:46,576 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: keepalive
+2024-04-08 19:22:47,890 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: partial_history
+2024-04-08 19:22:47,891 DEBUG   SenderThread:329325 [sender.py:send():336] send: history
+2024-04-08 19:22:47,891 DEBUG   SenderThread:329325 [sender.py:send_request():363] send_request: summary_record
+2024-04-08 19:22:47,892 INFO    SenderThread:329325 [sender.py:_save_file():1332] saving file wandb-summary.json with policy end
+2024-04-08 19:22:48,389 INFO    Thread-13 :329325 [dir_watcher.py:_on_file_modified():295] file/dir modified: wandb/wandb/run-20240408_191355-bu3exbs2/files/wandb-summary.json
+2024-04-08 19:22:48,892 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: status_report
+2024-04-08 19:22:51,577 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: keepalive
+2024-04-08 19:22:53,893 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: status_report
+2024-04-08 19:22:56,430 DEBUG   SenderThread:329325 [sender.py:send():336] send: stats
+2024-04-08 19:22:56,578 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: keepalive
+2024-04-08 19:22:59,431 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: status_report
+2024-04-08 19:23:01,579 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: keepalive
+2024-04-08 19:23:02,558 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: partial_history
+2024-04-08 19:23:02,559 DEBUG   SenderThread:329325 [sender.py:send():336] send: history
+2024-04-08 19:23:02,559 DEBUG   SenderThread:329325 [sender.py:send_request():363] send_request: summary_record
+2024-04-08 19:23:02,560 INFO    SenderThread:329325 [sender.py:_save_file():1332] saving file wandb-summary.json with policy end
+2024-04-08 19:23:03,393 INFO    Thread-13 :329325 [dir_watcher.py:_on_file_modified():295] file/dir modified: wandb/wandb/run-20240408_191355-bu3exbs2/files/wandb-summary.json
+2024-04-08 19:23:04,560 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: status_report
+2024-04-08 19:23:06,579 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: keepalive
+2024-04-08 19:23:09,561 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: status_report
+2024-04-08 19:23:11,580 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: keepalive
+2024-04-08 19:23:14,562 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: status_report
+2024-04-08 19:23:16,581 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: keepalive
+2024-04-08 19:23:19,562 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: status_report
+2024-04-08 19:23:21,582 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: keepalive
+2024-04-08 19:23:24,563 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: status_report
+2024-04-08 19:23:25,180 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: partial_history
+2024-04-08 19:23:25,181 DEBUG   SenderThread:329325 [sender.py:send():336] send: history
+2024-04-08 19:23:25,181 DEBUG   SenderThread:329325 [sender.py:send_request():363] send_request: summary_record
+2024-04-08 19:23:25,182 INFO    SenderThread:329325 [sender.py:_save_file():1332] saving file wandb-summary.json with policy end
+2024-04-08 19:23:25,400 INFO    Thread-13 :329325 [dir_watcher.py:_on_file_modified():295] file/dir modified: wandb/wandb/run-20240408_191355-bu3exbs2/files/wandb-summary.json
+2024-04-08 19:23:26,432 DEBUG   SenderThread:329325 [sender.py:send():336] send: stats
+2024-04-08 19:23:26,582 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: keepalive
+2024-04-08 19:23:30,433 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: status_report
+2024-04-08 19:23:31,583 DEBUG   HandlerThread:329325 [handler.py:handle_request():144] handle_request: keepalive
